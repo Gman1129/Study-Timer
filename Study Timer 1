@@ -1,0 +1,70 @@
+const timeDisplay = document.getElementById('time-display');
+const startButton = document.getElementById('start-button');
+const stopButton = document.getElementById('stop-button');
+const resetButton = document.getElementById('reset-button');
+
+let startTime = 0;
+let elapsedTime = 0;
+let timerInterval = null;
+
+const formatTime = (timeInMs) => {
+  const totalSeconds = Math.floor(timeInMs / 1000);
+  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+  const seconds = String(totalSeconds % 60).padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+const renderTime = () => {
+  timeDisplay.textContent = formatTime(elapsedTime);
+};
+
+const updateButtons = (isRunning) => {
+  startButton.disabled = isRunning;
+  stopButton.disabled = !isRunning;
+};
+
+const startTimer = () => {
+  if (timerInterval) {
+    return;
+  }
+
+  startTime = Date.now() - elapsedTime;
+  timerInterval = window.setInterval(() => {
+    elapsedTime = Date.now() - startTime;
+    renderTime();
+  }, 200);
+
+  updateButtons(true);
+};
+
+const stopTimer = () => {
+  if (!timerInterval) {
+    return;
+  }
+
+  window.clearInterval(timerInterval);
+  timerInterval = null;
+  elapsedTime = Date.now() - startTime;
+  renderTime();
+  updateButtons(false);
+};
+
+const resetTimer = () => {
+  if (timerInterval) {
+    window.clearInterval(timerInterval);
+    timerInterval = null;
+  }
+
+  elapsedTime = 0;
+  renderTime();
+  updateButtons(false);
+};
+
+startButton.addEventListener('click', startTimer);
+stopButton.addEventListener('click', stopTimer);
+resetButton.addEventListener('click', resetTimer);
+
+renderTime();
+updateButtons(false);
