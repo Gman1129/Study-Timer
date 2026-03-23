@@ -1,3 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Study Timer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <h1 id="time-display">00:00:00</h1>
+
+  <button id="start-button">Start</button>
+  <button id="stop-button">Stop</button>
+  <button id="reset-button">Reset</button>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
+
 const timeDisplay = document.getElementById('time-display');
 const startButton = document.getElementById('start-button');
 const stopButton = document.getElementById('stop-button');
