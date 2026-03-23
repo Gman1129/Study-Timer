@@ -1,126 +1,30 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Study Timer</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudyTimer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="root">
+      <main class="app">
+        <section class="timer-card" aria-labelledby="app-title">
+          <p class="eyebrow">Focus Session</p>
+          <h1 id="app-title">StudyTimer</h1>
+          <p class="description">Track your study sessions with a simple, distraction-free timer.</p>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 100px;
-      background-color: #f5f5f5;
-    }
+          <div class="time-display" id="time-display" aria-live="polite">00:00:00</div>
 
-    h1 {
-      font-size: 70px;
-    }
+          <div class="controls">
+            <button id="start-button" class="button primary" type="button">Start</button>
+            <button id="stop-button" class="button" type="button">Stop</button>
+            <button id="reset-button" class="button danger" type="button">Reset</button>
+          </div>
+        </section>
+      </main>
+    </div>
 
-    button {
-      font-size: 20px;
-      padding: 12px 25px;
-      margin: 10px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-    }
-
-    #start-button {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    #stop-button {
-      background-color: #f44336;
-      color: white;
-    }
-
-    #reset-button {
-      background-color: #555;
-      color: white;
-    }
-  </style>
-</head>
-
-<body>
-
-<h1 id="time-display">00:00:00</h1>
-
-<button id="start-button">Start</button>
-<button id="stop-button">Stop</button>
-<button id="reset-button">Reset</button>
-
-<script>
-const timeDisplay = document.getElementById('time-display');
-const startButton = document.getElementById('start-button');
-const stopButton = document.getElementById('stop-button');
-const resetButton = document.getElementById('reset-button');
-
-let startTime = 0;
-let elapsedTime = 0;
-let timerInterval = null;
-
-function formatTime(ms) {
-  const totalSeconds = Math.floor(ms / 1000);
-
-  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-  const seconds = String(totalSeconds % 60).padStart(2, '0');
-
-  return hours + ":" + minutes + ":" + seconds;
-}
-
-function renderTime() {
-  timeDisplay.textContent = formatTime(elapsedTime);
-}
-
-function updateButtons(isRunning) {
-  startButton.disabled = isRunning;
-  stopButton.disabled = !isRunning;
-}
-
-function startTimer() {
-  if (timerInterval !== null) return;
-
-  startTime = Date.now() - elapsedTime;
-
-  timerInterval = setInterval(function () {
-    elapsedTime = Date.now() - startTime;
-    renderTime();
-  }, 200);
-
-  updateButtons(true);
-}
-
-function stopTimer() {
-  if (timerInterval === null) return;
-
-  clearInterval(timerInterval);
-  timerInterval = null;
-
-  elapsedTime = Date.now() - startTime;
-  renderTime();
-
-  updateButtons(false);
-}
-
-function resetTimer() {
-  clearInterval(timerInterval);
-
-  timerInterval = null;
-  startTime = 0;
-  elapsedTime = 0;
-
-  renderTime();
-  updateButtons(false);
-}
-
-startButton.addEventListener('click', startTimer);
-stopButton.addEventListener('click', stopTimer);
-resetButton.addEventListener('click', resetTimer);
-
-renderTime();
-updateButtons(false);
-</script>
-
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
