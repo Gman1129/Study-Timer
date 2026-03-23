@@ -1,29 +1,55 @@
-study-timer/
-│
-├── index.html
-├── style.css
-└── script.js
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Study Timer</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      font-size: 70px;
+    }
+
+    button {
+      font-size: 20px;
+      padding: 12px 25px;
+      margin: 10px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    #start-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    #stop-button {
+      background-color: #f44336;
+      color: white;
+    }
+
+    #reset-button {
+      background-color: #555;
+      color: white;
+    }
+  </style>
 </head>
 
 <body>
 
-  <h1 id="time-display">00:00:00</h1>
+<h1 id="time-display">00:00:00</h1>
 
-  <button id="start-button">Start</button>
-  <button id="stop-button">Stop</button>
-  <button id="reset-button">Reset</button>
+<button id="start-button">Start</button>
+<button id="stop-button">Stop</button>
+<button id="reset-button">Reset</button>
 
-  <script src="script.js"></script>
-
-</body>
-</html>
-
+<script>
 const timeDisplay = document.getElementById('time-display');
 const startButton = document.getElementById('start-button');
 const stopButton = document.getElementById('stop-button');
@@ -33,60 +59,60 @@ let startTime = 0;
 let elapsedTime = 0;
 let timerInterval = null;
 
-const formatTime = (timeInMs) => {
-  const totalSeconds = Math.floor(timeInMs / 1000);
+function formatTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+
   const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
   const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
   const seconds = String(totalSeconds % 60).padStart(2, '0');
 
-  return `${hours}:${minutes}:${seconds}`;
-};
+  return hours + ":" + minutes + ":" + seconds;
+}
 
-const renderTime = () => {
+function renderTime() {
   timeDisplay.textContent = formatTime(elapsedTime);
-};
+}
 
-const updateButtons = (isRunning) => {
+function updateButtons(isRunning) {
   startButton.disabled = isRunning;
   stopButton.disabled = !isRunning;
-};
+}
 
-const startTimer = () => {
-  if (timerInterval) {
-    return;
-  }
+function startTimer() {
+  if (timerInterval !== null) return;
 
   startTime = Date.now() - elapsedTime;
-  timerInterval = window.setInterval(() => {
+
+  timerInterval = setInterval(function () {
     elapsedTime = Date.now() - startTime;
     renderTime();
   }, 200);
 
   updateButtons(true);
-};
+}
 
-const stopTimer = () => {
-  if (!timerInterval) {
-    return;
-  }
+function stopTimer() {
+  if (timerInterval === null) return;
 
-  window.clearInterval(timerInterval);
+  clearInterval(timerInterval);
   timerInterval = null;
+
   elapsedTime = Date.now() - startTime;
   renderTime();
+
   updateButtons(false);
-};
+}
 
-const resetTimer = () => {
-  if (timerInterval) {
-    window.clearInterval(timerInterval);
-    timerInterval = null;
-  }
+function resetTimer() {
+  clearInterval(timerInterval);
 
+  timerInterval = null;
+  startTime = 0;
   elapsedTime = 0;
+
   renderTime();
   updateButtons(false);
-};
+}
 
 startButton.addEventListener('click', startTimer);
 stopButton.addEventListener('click', stopTimer);
@@ -94,3 +120,7 @@ resetButton.addEventListener('click', resetTimer);
 
 renderTime();
 updateButtons(false);
+</script>
+
+</body>
+</html>
